@@ -6,6 +6,7 @@ import (
 	"github.com/joho/godotenv"
 	"os"
 	"reflect"
+	"strconv"
 	"strings"
 )
 
@@ -21,7 +22,14 @@ type EnvironmentConfig struct {
 	Environment EnvironmentType `env:"ENVIRONMENT"`
 }
 
-func Parse(structPointer any) {
+func ForceParse(structPointer any) {
+	err := Parse(structPointer)
+	if err != nil {
+		panic(err)
+	}
+}
+
+func Parse(structPointer any) error {
 	err := env.ParseWithFuncs(structPointer, map[reflect.Type]env.ParserFunc{
 		reflect.TypeOf("string"): func(s string) (interface{}, error) {
 			// This is fit docker-compose env file parse which will save \"xxx\" in .env file
@@ -32,8 +40,9 @@ func Parse(structPointer any) {
 		RequiredIfNoDef: true,
 	})
 	if err != nil {
-		panic(err)
+		return err
 	}
+	return nil
 }
 
 func Environment() EnvironmentType {
@@ -43,7 +52,11 @@ func Environment() EnvironmentType {
 var environmentConfig EnvironmentConfig
 
 func init() {
-	if os.Getenv("ENVIRONMENT") != string(Prod) {
+	res, err := strconv.ParseBool(os.Getenv("PARSE_DOTENV"))
+	if err != nil {
+		panic(fmt.Sprintf("PARSE_DOTENV %s is not bool", os.Getenv("PARSE_DOTENV")))
+	}
+	if res != true {
 		err := godotenv.Load(".env")
 		if err != nil {
 			panic(fmt.Errorf(
@@ -54,7 +67,7 @@ func init() {
 		}
 	}
 
-	Parse(&environmentConfig)
+	ForceParse(&environmentConfig)
 
 	if environmentConfig.Environment != Debug &&
 		environmentConfig.Environment != Test &&

@@ -49,26 +49,4 @@ func (a authable) ParseJwt(tokenStr string) (jwt.MapClaims, error) {
 	}
 
 	return token.Claims.(jwt.MapClaims), nil
-
-	//// get user id
-	//v, ok := payload["user_id"]
-	//if !ok {
-	//	return 0, "", http_err.Unauthorized.New("invalid JWT: user_id in claims is required")
-	//}
-	//userId, ok := v.(float64)
-	//if !ok || userId <= 0 {
-	//	return 0, "", http_err.Unauthorized.New("invalid JWT: user_id invalid")
-	//}
-	//
-	//// get platform
-	//IPlatform, ok := payload["platform"]
-	//if !ok {
-	//	platform = "unknown"
-	//}
-	//platform, ok = IPlatform.(string)
-	//if !ok {
-	//	platform = "unknown"
-	//}
-	//
-	//return int(userId), platform, nil
 }

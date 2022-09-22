@@ -57,22 +57,12 @@ func authN[T any](c *Context[T]) error {
 	c.Payload = t
 	c.Jwt = authHeader
 
-	err = contextDependence.CustomLogic(jwtMapClaims, c.C)
-	if err != nil {
-		return err
+	if contextDependence.CustomLogic != nil {
+		err = contextDependence.CustomLogic(jwtMapClaims, c.C)
+		if err != nil {
+			return err
+		}
 	}
-
-	//_, securityRequired := c.C.Get("security_required")
-	//must.True(err == nil || userId == 0)
-	//if (userId == 0 || err != nil) && securityRequired {
-	//	if err != nil {
-	//		return err
-	//	} else {
-	//		return http_err.Unauthorized.New()
-	//	}
-	//}
-	//c.C.Set("user_id", userId)
-	//c.UserId = userId
 
 	return nil
 }
