@@ -52,7 +52,11 @@ func Environment() EnvironmentType {
 var environmentConfig EnvironmentConfig
 
 func init() {
-	res, err := strconv.ParseBool(os.Getenv("PARSE_DOTENV"))
+	isParseDotenv := os.Getenv("PARSE_DOTENV")
+	if isParseDotenv == "" {
+		isParseDotenv = "false"
+	}
+	res, err := strconv.ParseBool(isParseDotenv)
 	if err != nil {
 		panic(fmt.Sprintf("PARSE_DOTENV %s is not bool", os.Getenv("PARSE_DOTENV")))
 	}
