@@ -19,7 +19,7 @@ const (
 )
 
 type EnvironmentConfig struct {
-	Environment EnvironmentType `env:"ENVIRONMENT" default:"TEST"`
+	Environment EnvironmentType `env:"ENVIRONMENT" envDefault:"TEST"`
 }
 
 func ForceParse(structPointer any) {

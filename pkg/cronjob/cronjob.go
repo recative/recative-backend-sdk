@@ -28,7 +28,7 @@ func (c *cron_) Raw() *cron.Cron {
 var _ Cron = &cron_{}
 
 type Config struct {
-	LocationString string `env:"CRON_LOCATION" default:"Asia/Shanghai"`
+	LocationString string `env:"CRON_LOCATION" envDefault:"Asia/Shanghai"`
 }
 
 func New(config Config) Cron {
