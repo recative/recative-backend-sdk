@@ -49,7 +49,7 @@ func authN[T any](c *Context[T]) error {
 	}
 
 	var t T
-	err = mapstructure.Decode(jwtMapClaims, &t)
+	err = mapstructure.WeakDecode(jwtMapClaims, &t)
 	if err != nil {
 		return http_err.Unauthorized.Wrap(err)
 	}
