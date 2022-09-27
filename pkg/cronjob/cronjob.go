@@ -28,11 +28,11 @@ func (c *cron_) Raw() *cron.Cron {
 var _ Cron = &cron_{}
 
 type Config struct {
-	LocationString string
+	LocationString string `env:"CRON_LOCATION" default:"Asia/Shanghai"`
 }
 
 func New(config Config) Cron {
-	location, err := time.LoadLocation("Asia/Shanghai")
+	location, err := time.LoadLocation(config.LocationString)
 	if err != nil {
 		logger.Panic("cron failed to parse location string", zap.Error(err))
 	}
