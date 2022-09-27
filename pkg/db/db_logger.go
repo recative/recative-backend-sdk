@@ -39,7 +39,7 @@ func NewProductionGormLoggerConfig() LoggerConfig {
 	return LoggerConfig{
 		LogLevel:                  gormLogger.Error,
 		SlowThreshold:             3 * time.Second,
-		IgnoreRecordNotFoundError: false,
+		IgnoreRecordNotFoundError: true,
 	}
 }
 

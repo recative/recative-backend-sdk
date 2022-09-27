@@ -24,6 +24,8 @@ func New(config Config) *gorm.DB {
 	var gormLogger gormlogger.Interface
 
 	if env.Environment() == env.Prod {
+		gormLogger = NewProductionGormLoggerConfig().BuildWith(logger.RawLogger().Sugar())
+	} else {
 		gormLogger = NewDevelopmentGormLoggerConfig().BuildWith(logger.RawLogger().Sugar())
 	}
 
