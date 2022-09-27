@@ -60,11 +60,13 @@ func initLogger(opts ...zap.Option) (*zap.Logger, error) {
 	switch env.Environment() {
 	case env.Debug:
 		config := zap.NewDevelopmentConfig()
+		config.OutputPaths = []string{"stdout"}
 		config.EncoderConfig = zap.NewProductionEncoderConfig()
 		config.EncoderConfig.EncodeLevel = zapcore.CapitalColorLevelEncoder
 		return config.Build(opts...)
 	case env.Test:
 		config := zap.NewDevelopmentConfig()
+		config.OutputPaths = []string{"stdout"}
 		config.EncoderConfig = zap.NewProductionEncoderConfig()
 		config.Encoding = "json"
 		return config.Build(opts...)
@@ -72,6 +74,7 @@ func initLogger(opts ...zap.Option) (*zap.Logger, error) {
 		fallthrough
 	default:
 		config := zap.NewProductionConfig()
+		config.OutputPaths = []string{"stdout"}
 		config.EncoderConfig = initEncoderConfig()
 		return config.Build(opts...)
 	}
