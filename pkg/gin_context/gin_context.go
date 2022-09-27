@@ -6,7 +6,7 @@ import (
 	"github.com/recative/recative-backend-sdk/pkg/auth"
 )
 
-type CustomLogic = func(claims jwt.Claims, c *gin.Context) error
+type CustomLogic = func(claims jwt.MapClaims, c *gin.Context) error
 
 type ContextDependence struct {
 	Auther      auth.Authable
