@@ -2,6 +2,7 @@ package auth
 
 import (
 	"github.com/golang-jwt/jwt"
+	"github.com/mitchellh/mapstructure"
 	"github.com/recative/recative-backend-sdk/pkg/http_engine/http_err"
 	"github.com/recative/recative-backend-sdk/pkg/logger"
 	"go.uber.org/zap"
@@ -9,7 +10,8 @@ import (
 
 type Authable interface {
 	GenJwt(mapClaims jwt.MapClaims) string
-	ParseJwt(tokenStr string) (jwt.MapClaims, error)
+	ParseJwt(tokenStr string, structPointer any) error
+	ParseJwtToMap(tokenStr string) (jwt.MapClaims, error)
 }
 
 type authable struct {
@@ -36,7 +38,7 @@ func (a authable) GenJwt(mapClaims jwt.MapClaims) string {
 }
 
 // ParseJwt returns user id or error if any occurs.
-func (a authable) ParseJwt(tokenStr string) (jwt.MapClaims, error) {
+func (a authable) ParseJwtToMap(tokenStr string) (jwt.MapClaims, error) {
 	if tokenStr == "" {
 		return nil, http_err.Unauthorized.New("invalid token header")
 	}
@@ -49,4 +51,26 @@ func (a authable) ParseJwt(tokenStr string) (jwt.MapClaims, error) {
 	}
 
 	return token.Claims.(jwt.MapClaims), nil
+}
+
+func (a authable) ParseJwt(tokenStr string, structPointer any) error {
+	if tokenStr == "" {
+		return http_err.Unauthorized.New("invalid token header")
+	}
+	token, err := jwt.Parse(tokenStr,
+		func(token *jwt.Token) (interface{}, error) {
+			return []byte(a.JwtSecret), nil
+		})
+	if err != nil {
+		return http_err.Unauthorized.New("invalid JWT: parsing failed" + err.Error())
+	}
+
+	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+		if err := mapstructure.Decode(claims, structPointer); err != nil {
+			return http_err.Unauthorized.New("invalid JWT: parsing failed" + err.Error())
+		}
+		return nil
+	}
+
+	return http_err.Unauthorized.New("invalid JWT: parsing failed")
 }
