@@ -43,7 +43,7 @@ func authN[T any](c *Context[T]) error {
 		authHeader = c.C.GetHeader("Authorization")
 	}
 	// authenticate
-	jwtMapClaims, err := contextDependence.Auther.ParseJwt(ParseAuthorizationBearerHeader(authHeader))
+	jwtMapClaims, err := contextDependence.Auther.ParseJwtToMap(ParseAuthorizationBearerHeader(authHeader))
 	if err != nil {
 		return http_err.Unauthorized.Wrap(err)
 	}
