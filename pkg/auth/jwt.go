@@ -42,7 +42,7 @@ func (a authable) ParseJwtToMap(tokenStr string) (jwt.MapClaims, error) {
 	if tokenStr == "" {
 		return nil, http_err.Unauthorized.New("invalid token header")
 	}
-	token, err := jwt.Parse(tokenStr,
+	token, err := (&jwt.Parser{UseJSONNumber: true}).Parse(tokenStr,
 		func(token *jwt.Token) (interface{}, error) {
 			return []byte(a.JwtSecret), nil
 		})
@@ -57,7 +57,7 @@ func (a authable) ParseJwt(tokenStr string, structPointer any) error {
 	if tokenStr == "" {
 		return http_err.Unauthorized.New("invalid token header")
 	}
-	token, err := jwt.Parse(tokenStr,
+	token, err := (&jwt.Parser{UseJSONNumber: true}).Parse(tokenStr,
 		func(token *jwt.Token) (interface{}, error) {
 			return []byte(a.JwtSecret), nil
 		})
