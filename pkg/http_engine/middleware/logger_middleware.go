@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
-	"github.com/recative/recative-backend-sdk/pkg/env"
+	"github.com/recative/recative-backend-sdk/pkg/config"
 	"github.com/recative/recative-backend-sdk/pkg/logger"
 	"go.uber.org/zap"
 	"io"
@@ -69,7 +69,7 @@ func Logger() gin.HandlerFunc {
 		c.Set("request_id", requestID)
 
 		// magic, WARN!
-		if env.Environment() != env.Prod {
+		if config.Environment() != config.Prod {
 			log := LogDevRequestCreator(c)
 			c.Next()
 			log(c)

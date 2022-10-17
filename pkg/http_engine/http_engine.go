@@ -2,7 +2,7 @@ package http_engine
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/recative/recative-backend-sdk/pkg/env"
+	"github.com/recative/recative-backend-sdk/pkg/config"
 	"github.com/recative/recative-backend-sdk/pkg/http_engine/middleware"
 )
 
@@ -12,7 +12,7 @@ type Config struct {
 }
 
 func Default() *gin.Engine {
-	if env.Environment() == env.Prod {
+	if config.Environment() == config.Prod {
 		gin.SetMode(gin.ReleaseMode)
 	}
 

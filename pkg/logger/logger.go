@@ -1,7 +1,7 @@
 package logger
 
 import (
-	"github.com/recative/recative-backend-sdk/pkg/env"
+	"github.com/recative/recative-backend-sdk/pkg/config"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"time"
@@ -57,20 +57,20 @@ func initEncoderConfig() zapcore.EncoderConfig {
 }
 
 func initLogger(opts ...zap.Option) (*zap.Logger, error) {
-	switch env.Environment() {
-	case env.Debug:
+	switch config.Environment() {
+	case config.Debug:
 		config := zap.NewDevelopmentConfig()
 		config.OutputPaths = []string{"stdout"}
 		config.EncoderConfig = zap.NewProductionEncoderConfig()
 		config.EncoderConfig.EncodeLevel = zapcore.CapitalColorLevelEncoder
 		return config.Build(opts...)
-	case env.Test:
+	case config.Test:
 		config := zap.NewDevelopmentConfig()
 		config.OutputPaths = []string{"stdout"}
 		config.EncoderConfig = zap.NewProductionEncoderConfig()
 		config.Encoding = "json"
 		return config.Build(opts...)
-	case env.Prod:
+	case config.Prod:
 		fallthrough
 	default:
 		config := zap.NewProductionConfig()

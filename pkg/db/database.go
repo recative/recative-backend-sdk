@@ -1,7 +1,7 @@
 package db
 
 import (
-	"github.com/recative/recative-backend-sdk/pkg/env"
+	"github.com/recative/recative-backend-sdk/pkg/config"
 	"github.com/recative/recative-backend-sdk/pkg/logger"
 	"go.uber.org/zap"
 	driver "gorm.io/driver/postgres"
@@ -20,16 +20,16 @@ type Config struct {
 	PgsqlMaxOpen  int    `env:"PGSQL_MAX_OPEN" envDefault:"50"`
 }
 
-func New(config Config) *gorm.DB {
+func New(config_ Config) *gorm.DB {
 	var gormLogger gormlogger.Interface
 
-	if env.Environment() == env.Prod {
+	if config.Environment() == config.Prod {
 		gormLogger = NewProductionGormLoggerConfig().BuildWith(logger.RawLogger().Sugar())
 	} else {
 		gormLogger = NewDevelopmentGormLoggerConfig().BuildWith(logger.RawLogger().Sugar())
 	}
 
-	db, err := gorm.Open(driver.Open(config.PgsqlUri), &gorm.Config{Logger: gormLogger})
+	db, err := gorm.Open(driver.Open(config_.PgsqlUri), &gorm.Config{Logger: gormLogger})
 	if err != nil {
 		panic("Open PostgreSQL DB failed: " + err.Error())
 	}
@@ -37,8 +37,8 @@ func New(config Config) *gorm.DB {
 	if err != nil {
 		logger.Panic("init database failed", zap.Error(err))
 	}
-	sqlDB.SetMaxIdleConns(config.PgsqlMaxIdle)
-	sqlDB.SetMaxOpenConns(config.PgsqlMaxOpen)
+	sqlDB.SetMaxIdleConns(config_.PgsqlMaxIdle)
+	sqlDB.SetMaxOpenConns(config_.PgsqlMaxOpen)
 
 	return db
 }

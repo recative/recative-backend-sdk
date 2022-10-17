@@ -9,7 +9,7 @@ import (
 )
 
 type Config struct {
-	Environment  string
+	Environment  EnvironmentType
 	ConfigFile   ConfigFile
 	AutoParseEnv bool
 	// WeakMatchName ignore difference between camelCase, snake_case, etc.
@@ -37,7 +37,7 @@ func defaultConfig(opts ...ConfigOption) *Config {
 	viper.SetDefault("WEAK_MATCH_NAME", true)
 
 	config := &Config{
-		Environment: viper.GetString("ENVIRONMENT"),
+		Environment: EnvironmentType(viper.GetString("ENVIRONMENT")),
 		ConfigFile: ConfigFile{
 			Name: viper.GetString("CONFIG_FILE_NAME"),
 			Type: viper.GetString("CONFIG_FILE_TYPE"),
@@ -75,6 +75,10 @@ func Init(opts ...ConfigOption) error {
 
 	if err := viper.ReadInConfig(); err != nil {
 		return err
+	}
+
+	if !(config.Environment != Debug && config.Environment != Test && config.Environment != Prod) {
+		panic("invalid environment: " + string(config.Environment))
 	}
 
 	_config = *config

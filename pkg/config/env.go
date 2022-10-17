@@ -13,7 +13,5 @@ type EnvironmentConfig struct {
 }
 
 func Environment() EnvironmentType {
-	return env
+	return _config.Environment
 }
-
-var env EnvironmentType
