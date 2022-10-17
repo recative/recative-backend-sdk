@@ -77,7 +77,7 @@ func Init(opts ...ConfigOption) error {
 		return err
 	}
 
-	if !(config.Environment != Debug && config.Environment != Test && config.Environment != Prod) {
+	if config.Environment != Debug && config.Environment != Test && config.Environment != Prod {
 		panic("invalid environment: " + string(config.Environment))
 	}
 
