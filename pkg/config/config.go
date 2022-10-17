@@ -2,7 +2,6 @@ package config
 
 import (
 	"github.com/mitchellh/mapstructure"
-	"github.com/recative/recative-backend-sdk/util/is_zero"
 	"github.com/spf13/viper"
 	"os"
 	"reflect"
@@ -10,6 +9,7 @@ import (
 )
 
 type Config struct {
+	Environment  string
 	ConfigFile   ConfigFile
 	AutoParseEnv bool
 	// WeakMatchName ignore difference between camelCase, snake_case, etc.
@@ -22,12 +22,46 @@ type ConfigFile struct {
 	Path string
 }
 
-func Init(config Config) error {
-	if is_zero.CheckComparable(config) {
-		viper.SetConfigName(config.ConfigFile.Name)
-		viper.SetConfigType(config.ConfigFile.Type)
-		viper.AddConfigPath(config.ConfigFile.Path)
+var _config Config
+
+func init() {
+	viper.AutomaticEnv()
+}
+
+func defaultConfig(opts ...ConfigOption) *Config {
+	viper.SetDefault("ENVIRONMENT", string(Debug))
+	viper.SetDefault("CONFIG_FILE_NAME", "config")
+	viper.SetDefault("CONFIG_FILE_TYPE", "toml")
+	viper.SetDefault("CONFIG_FILE_PATH", ".")
+	viper.SetDefault("AUTO_PARSE_ENV", true)
+	viper.SetDefault("WEAK_MATCH_NAME", true)
+
+	config := &Config{
+		Environment: viper.GetString("ENVIRONMENT"),
+		ConfigFile: ConfigFile{
+			Name: viper.GetString("CONFIG_FILE_NAME"),
+			Type: viper.GetString("CONFIG_FILE_TYPE"),
+			Path: viper.GetString("CONFIG_FILE_PATH"),
+		},
+		AutoParseEnv:  viper.GetBool("AUTO_PARSE_ENV"),
+		WeakMatchName: viper.GetBool("WEAK_MATCH_NAME"),
 	}
+
+	for _, opt := range opts {
+		opt(config)
+	}
+
+	return config
+}
+
+type ConfigOption func(*Config)
+
+func Init(opts ...ConfigOption) error {
+	config := defaultConfig(opts...)
+
+	viper.SetConfigName(config.ConfigFile.Name)
+	viper.SetConfigType(config.ConfigFile.Type)
+	viper.AddConfigPath(config.ConfigFile.Path)
 
 	if config.AutoParseEnv {
 		for _, v := range os.Environ() {
@@ -43,15 +77,19 @@ func Init(config Config) error {
 		return err
 	}
 
+	_config = *config
+
 	return nil
 }
 
 func Parse(structPointer any) error {
 	if err := viper.Unmarshal(structPointer, func(config *mapstructure.DecoderConfig) {
-		config.MatchName = func(mapKey, fieldName string) bool {
-			mapKey = strings.ReplaceAll(mapKey, "_", "")
-			fieldName = strings.ReplaceAll(fieldName, "_", "")
-			return strings.EqualFold(mapKey, fieldName)
+		if _config.WeakMatchName {
+			config.MatchName = func(mapKey, fieldName string) bool {
+				mapKey = strings.ReplaceAll(mapKey, "_", "")
+				fieldName = strings.ReplaceAll(fieldName, "_", "")
+				return strings.EqualFold(mapKey, fieldName)
+			}
 		}
 		config.Squash = true
 		config.DecodeHook = mapstructure.ComposeDecodeHookFunc(
@@ -75,7 +113,6 @@ func stringTrimHookFunc() mapstructure.DecodeHookFunc {
 			return strings.Trim(data.(string), `"`), nil
 		}
 
-		// Convert it by parsing
 		return data, nil
 	}
 }
