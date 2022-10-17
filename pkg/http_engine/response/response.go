@@ -47,6 +47,7 @@ func Err(c *gin.Context, err error) {
 		err := err.(*http_err.ResponseError)
 		err.Id = c.GetString("request_id")
 		c.JSON(err.ResponseStatusCode(), err)
+		LogErrorResponse(c, err)
 		c.Abort()
 		return
 	default:

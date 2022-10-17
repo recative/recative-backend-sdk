@@ -22,14 +22,14 @@ type EnvironmentConfig struct {
 	Environment EnvironmentType `env:"ENVIRONMENT" envDefault:"TEST"`
 }
 
-func ForceParse(structPointer any) {
-	err := Parse(structPointer)
+func forceParse(structPointer any) {
+	err := parse(structPointer)
 	if err != nil {
 		panic(err)
 	}
 }
 
-func Parse(structPointer any) error {
+func parse(structPointer any) error {
 	err := env.ParseWithFuncs(structPointer, map[reflect.Type]env.ParserFunc{
 		reflect.TypeOf("string"): func(s string) (interface{}, error) {
 			// This is fit docker-compose env file parse which will save \"xxx\" in .env file
@@ -71,7 +71,7 @@ func init() {
 		}
 	}
 
-	ForceParse(&environmentConfig)
+	forceParse(&environmentConfig)
 
 	if environmentConfig.Environment != Debug &&
 		environmentConfig.Environment != Test &&
