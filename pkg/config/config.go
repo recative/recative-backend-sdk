@@ -108,6 +108,14 @@ func Parse(structPointer any) error {
 	return nil
 }
 
+func ForceParse(structPointer any) {
+	if err := viper.Unmarshal(structPointer); err != nil {
+		panic(err)
+	}
+
+	return
+}
+
 func stringTrimHookFunc() mapstructure.DecodeHookFunc {
 	return func(
 		f reflect.Type,
