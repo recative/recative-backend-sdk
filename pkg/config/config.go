@@ -87,21 +87,7 @@ func Init(opts ...ConfigOption) error {
 }
 
 func Parse(structPointer any) error {
-	if err := viper.Unmarshal(structPointer, func(config *mapstructure.DecoderConfig) {
-		if _config.WeakMatchName {
-			config.MatchName = func(mapKey, fieldName string) bool {
-				mapKey = strings.ReplaceAll(mapKey, "_", "")
-				fieldName = strings.ReplaceAll(fieldName, "_", "")
-				return strings.EqualFold(mapKey, fieldName)
-			}
-		}
-		config.Squash = true
-		config.DecodeHook = mapstructure.ComposeDecodeHookFunc(
-			stringTrimHookFunc(),
-			mapstructure.StringToTimeDurationHookFunc(),
-			mapstructure.StringToSliceHookFunc(","),
-		)
-	}); err != nil {
+	if err := viper.Unmarshal(structPointer, defaultDecoderConfig); err != nil {
 		return err
 	}
 
@@ -109,11 +95,41 @@ func Parse(structPointer any) error {
 }
 
 func ForceParse(structPointer any) {
-	if err := viper.Unmarshal(structPointer); err != nil {
+	err := Parse(structPointer)
+	if err != nil {
 		panic(err)
 	}
+}
 
-	return
+func ParseByKey(key string, structPointer any) error {
+	if err := viper.UnmarshalKey(key, structPointer, defaultDecoderConfig); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func ForceParseByKey(key string, structPointer any) {
+	err := ParseByKey(key, structPointer)
+	if err != nil {
+		panic(err)
+	}
+}
+
+func defaultDecoderConfig(config *mapstructure.DecoderConfig) {
+	if _config.WeakMatchName {
+		config.MatchName = func(mapKey, fieldName string) bool {
+			mapKey = strings.ReplaceAll(mapKey, "_", "")
+			fieldName = strings.ReplaceAll(fieldName, "_", "")
+			return strings.EqualFold(mapKey, fieldName)
+		}
+	}
+	config.Squash = true
+	config.DecodeHook = mapstructure.ComposeDecodeHookFunc(
+		stringTrimHookFunc(),
+		mapstructure.StringToTimeDurationHookFunc(),
+		mapstructure.StringToSliceHookFunc(","),
+	)
 }
 
 func stringTrimHookFunc() mapstructure.DecodeHookFunc {
