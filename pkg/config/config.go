@@ -124,7 +124,6 @@ func defaultDecoderConfig(config *mapstructure.DecoderConfig) {
 			return strings.EqualFold(mapKey, fieldName)
 		}
 	}
-	config.Squash = true
 	config.DecodeHook = mapstructure.ComposeDecodeHookFunc(
 		stringTrimHookFunc(),
 		mapstructure.StringToTimeDurationHookFunc(),
