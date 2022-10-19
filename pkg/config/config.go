@@ -31,7 +31,7 @@ func init() {
 func defaultConfig(opts ...ConfigOption) *Config {
 	viper.SetDefault("ENVIRONMENT", string(Debug))
 	viper.SetDefault("CONFIG_FILE_NAME", "config")
-	viper.SetDefault("CONFIG_FILE_TYPE", "toml")
+	viper.SetDefault("CONFIG_FILE_TYPE", "yaml")
 	viper.SetDefault("CONFIG_FILE_PATH", ".")
 	viper.SetDefault("AUTO_PARSE_ENV", true)
 	viper.SetDefault("WEAK_MATCH_NAME", true)
