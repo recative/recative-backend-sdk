@@ -6,6 +6,7 @@ import (
 	"github.com/recative/recative-backend-sdk/pkg/http_engine/middleware"
 	"github.com/recative/recative-backend-sdk/pkg/logger"
 	"go.uber.org/zap"
+	"net/http"
 )
 
 type Config struct {
@@ -31,6 +32,12 @@ func Default(_config Config) *CustomHttpEngine {
 		Engine: app,
 		config: _config,
 	}
+}
+
+func (e *CustomHttpEngine) AddPing() {
+	e.GET("/ping", func(context *gin.Context) {
+		context.Status(http.StatusOK)
+	})
 }
 
 func (e *CustomHttpEngine) Start() {
