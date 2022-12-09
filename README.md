@@ -1,1 +1,1 @@
-# recative-backend-sdk
+# recative-service-sdk
