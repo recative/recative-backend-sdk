@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
-	"github.com/recative/recative-backend-sdk/pkg/logger"
+	"github.com/recative/recative-service-sdk/pkg/logger"
 	"go.uber.org/zap"
 	"io"
 	"strconv"

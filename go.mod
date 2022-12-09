@@ -1,4 +1,4 @@
-module github.com/recative/recative-backend-sdk
+module github.com/recative/recative-service-sdk
 
 go 1.19
 
