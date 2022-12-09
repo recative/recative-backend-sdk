@@ -3,9 +3,9 @@ package gin_context
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/mitchellh/mapstructure"
-	"github.com/recative/recative-backend-sdk/pkg/http_engine/http_err"
-	"github.com/recative/recative-backend-sdk/pkg/http_engine/response"
-	"github.com/recative/recative-backend-sdk/util/array"
+	"github.com/recative/recative-service-sdk/pkg/http_engine/http_err"
+	"github.com/recative/recative-service-sdk/pkg/http_engine/response"
+	"github.com/recative/recative-service-sdk/util/array"
 	"strings"
 )
 

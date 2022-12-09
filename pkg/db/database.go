@@ -1,8 +1,8 @@
 package db
 
 import (
-	"github.com/recative/recative-backend-sdk/pkg/config"
-	"github.com/recative/recative-backend-sdk/pkg/logger"
+	"github.com/recative/recative-service-sdk/pkg/config"
+	"github.com/recative/recative-service-sdk/pkg/logger"
 	"go.uber.org/zap"
 	driver "gorm.io/driver/postgres"
 	"gorm.io/gorm"
