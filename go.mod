@@ -4,13 +4,11 @@ go 1.19
 
 require (
 	github.com/avast/retry-go v3.0.0+incompatible
-	github.com/caarlos0/env/v6 v6.10.1
 	github.com/getkin/kin-openapi v0.103.0
 	github.com/gin-gonic/gin v1.8.1
 	github.com/go-redis/redis/v7 v7.4.1
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/google/uuid v1.3.0
-	github.com/joho/godotenv v1.4.0
 	github.com/mitchellh/mapstructure v1.5.0
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/samber/lo v1.28.2
