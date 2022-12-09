@@ -3,7 +3,7 @@ package gin_context
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
-	"github.com/recative/recative-service-sdk/pkg/auth"
+	"github.com/recative/recative-backend-sdk/pkg/auth"
 )
 
 type CustomLogic = func(claims jwt.MapClaims, c *gin.Context) error

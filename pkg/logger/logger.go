@@ -1,7 +1,7 @@
 package logger
 
 import (
-	"github.com/recative/recative-service-sdk/pkg/config"
+	"github.com/recative/recative-backend-sdk/pkg/config"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"time"

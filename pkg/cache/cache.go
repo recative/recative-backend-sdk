@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/go-redis/redis/v7"
-	"github.com/recative/recative-service-sdk/pkg/logger"
+	"github.com/recative/recative-backend-sdk/pkg/logger"
 	"go.uber.org/zap"
 	"time"
 )

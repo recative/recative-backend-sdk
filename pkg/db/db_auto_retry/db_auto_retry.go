@@ -2,7 +2,7 @@ package db_auto_retry
 
 import (
 	"github.com/avast/retry-go"
-	"github.com/recative/recative-service-sdk/pkg/db/db_err"
+	"github.com/recative/recative-backend-sdk/pkg/db/db_err"
 )
 
 func SerializableTransactionAutoRetry(retryTimes uint, errorReturnFunc func() error) error {

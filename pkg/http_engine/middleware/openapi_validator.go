@@ -6,9 +6,9 @@ import (
 	"github.com/getkin/kin-openapi/openapi3filter"
 	legacyrouter "github.com/getkin/kin-openapi/routers/legacy"
 	"github.com/gin-gonic/gin"
-	"github.com/recative/recative-service-sdk/pkg/http_engine/http_err"
-	"github.com/recative/recative-service-sdk/pkg/http_engine/response"
-	"github.com/recative/recative-service-sdk/pkg/logger"
+	"github.com/recative/recative-backend-sdk/pkg/http_engine/http_err"
+	"github.com/recative/recative-backend-sdk/pkg/http_engine/response"
+	"github.com/recative/recative-backend-sdk/pkg/logger"
 	"go.uber.org/zap"
 )
 

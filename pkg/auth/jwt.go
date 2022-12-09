@@ -3,8 +3,8 @@ package auth
 import (
 	"github.com/golang-jwt/jwt"
 	"github.com/mitchellh/mapstructure"
-	"github.com/recative/recative-service-sdk/pkg/http_engine/http_err"
-	"github.com/recative/recative-service-sdk/pkg/logger"
+	"github.com/recative/recative-backend-sdk/pkg/http_engine/http_err"
+	"github.com/recative/recative-backend-sdk/pkg/logger"
 	"go.uber.org/zap"
 )
 

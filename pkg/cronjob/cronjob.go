@@ -1,7 +1,7 @@
 package cronjob
 
 import (
-	"github.com/recative/recative-service-sdk/pkg/logger"
+	"github.com/recative/recative-backend-sdk/pkg/logger"
 	"github.com/robfig/cron/v3"
 	"go.uber.org/zap"
 	"time"

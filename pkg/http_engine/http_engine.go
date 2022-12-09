@@ -2,9 +2,9 @@ package http_engine
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/recative/recative-service-sdk/pkg/config"
-	"github.com/recative/recative-service-sdk/pkg/http_engine/middleware"
-	"github.com/recative/recative-service-sdk/pkg/logger"
+	"github.com/recative/recative-backend-sdk/pkg/config"
+	"github.com/recative/recative-backend-sdk/pkg/http_engine/middleware"
+	"github.com/recative/recative-backend-sdk/pkg/logger"
 	"go.uber.org/zap"
 	"net/http"
 )
