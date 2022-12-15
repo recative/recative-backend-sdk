@@ -10,10 +10,6 @@ type ResponseErrorType struct {
 	Name string
 }
 
-func (responseErrorType ResponseErrorType) Error() string {
-	return fmt.Sprintf("%d: %s", responseErrorType.Code, responseErrorType.Name)
-}
-
 func (responseErrorType ResponseErrorType) Wrap(err error) error {
 	if _, ok := err.(*ResponseError); ok {
 		return err
@@ -73,14 +69,6 @@ func (responseErrorType ResponseErrorType) NewWithPayload(message string, payloa
 		Message: message,
 		Payload: payload,
 	}
-}
-
-func (responseErrorType ResponseErrorType) Is(err error) bool {
-	v, ok := err.(*ResponseErrorType)
-	if !ok {
-		return false
-	}
-	return v.Code == responseErrorType.Code
 }
 
 type ResponseError struct {
