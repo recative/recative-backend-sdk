@@ -3,6 +3,7 @@ package db_err
 import (
 	"errors"
 	"fmt"
+	"github.com/recative/recative-service-sdk/pkg/http_engine/http_err"
 	"gorm.io/gorm"
 	"strings"
 )
@@ -165,4 +166,14 @@ func (d *DBErr) Unwrap() error {
 		return nil
 	}
 	return e
+}
+
+func (d *DBErr) ToHttpError() *http_err.ResponseError {
+	return &http_err.ResponseError{
+		Id:      "",
+		Code:    d.Code,
+		Name:    d.Name,
+		Message: d.Message,
+		Payload: d.Payload,
+	}
 }
