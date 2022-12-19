@@ -44,7 +44,7 @@ func Err(c *gin.Context, err error) {
 	//	err = errs.ServiceUnavailable.Wrap(err)
 	//}
 	defer c.Abort()
-	
+
 	switch err.(type) {
 	case *http_err.ResponseError:
 		err := err.(*http_err.ResponseError)

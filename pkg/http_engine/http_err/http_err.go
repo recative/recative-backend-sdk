@@ -10,6 +10,16 @@ type ResponseErrorType struct {
 	Name string
 }
 
+var _ ErrorIs = (*ResponseErrorType)(nil)
+
+func (responseErrorType ResponseErrorType) Is(err error) bool {
+	e, ok := err.(*ResponseError)
+	if !ok {
+		return false
+	}
+	return responseErrorType.Code == e.Code
+}
+
 func (responseErrorType ResponseErrorType) Wrap(err error) error {
 	if _, ok := err.(*ResponseError); ok {
 		return err

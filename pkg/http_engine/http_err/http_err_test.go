@@ -6,6 +6,11 @@ import (
 	"testing"
 )
 
+func TestResponseErrorType_Is(t *testing.T) {
+	err := InternalServerError.New("test")
+	assert.Equal(t, true, InternalServerError.Is(err))
+}
+
 func TestResponseError_Is(t *testing.T) {
 	err := InternalServerError.New("test")
 	assert.Equal(t, true, errors.Is(err, InternalServerError.New()))
