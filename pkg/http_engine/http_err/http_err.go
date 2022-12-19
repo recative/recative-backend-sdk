@@ -79,6 +79,9 @@ type ResponseError struct {
 	Payload any    `json:"payload"`
 }
 
+var _ ErrorIs = (*ResponseError)(nil)
+var _ ErrorUnwrap = (*ResponseError)(nil)
+
 func (responseError *ResponseError) Error() string {
 	return fmt.Sprintf("%s: %d: %s: %s: %v",
 		responseError.Id,
@@ -93,4 +96,23 @@ func (responseError *ResponseError) ResponseStatusCode() int {
 		return http.StatusOK
 	}
 	return responseError.Code / 1000
+}
+
+func (responseError *ResponseError) Is(err error) bool {
+	e, ok := err.(*ResponseError)
+	if !ok {
+		return false
+	}
+	return responseError.Code == e.Code
+}
+
+func (responseError *ResponseError) Unwrap() error {
+	if responseError.Payload == nil {
+		return nil
+	}
+	err, ok := responseError.Payload.(error)
+	if !ok {
+		return nil
+	}
+	return err
 }

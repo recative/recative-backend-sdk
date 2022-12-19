@@ -1,6 +1,8 @@
 package config
 
 import (
+	"github.com/creasty/defaults"
+	"github.com/go-playground/validator/v10"
 	"github.com/mitchellh/mapstructure"
 	"github.com/spf13/viper"
 	"os"
@@ -14,6 +16,10 @@ type Config struct {
 	AutoParseEnv bool
 	// WeakMatchName ignore difference between camelCase, snake_case, etc.
 	WeakMatchName bool
+	// use github.com/creasty/defaults
+	InitWithDefault bool
+	// use github.com/go-playground/validator
+	ValidAfterParse bool
 }
 
 type ConfigFile struct {
@@ -87,7 +93,7 @@ func Init(opts ...ConfigOption) error {
 }
 
 func Parse(structPointer any) error {
-	if err := viper.Unmarshal(structPointer, defaultDecoderConfig); err != nil {
+	if err := parse("", structPointer); err != nil {
 		return err
 	}
 
@@ -95,14 +101,14 @@ func Parse(structPointer any) error {
 }
 
 func ForceParse(structPointer any) {
-	err := Parse(structPointer)
+	err := parse("", structPointer)
 	if err != nil {
 		panic(err)
 	}
 }
 
 func ParseByKey(key string, structPointer any) error {
-	if err := viper.UnmarshalKey(key, structPointer, defaultDecoderConfig); err != nil {
+	if err := parse(key, structPointer); err != nil {
 		return err
 	}
 
@@ -110,10 +116,35 @@ func ParseByKey(key string, structPointer any) error {
 }
 
 func ForceParseByKey(key string, structPointer any) {
-	err := ParseByKey(key, structPointer)
+	err := parse(key, structPointer)
 	if err != nil {
 		panic(err)
 	}
+}
+
+func parse(key string, structPointer any) (err error) {
+	if _config.InitWithDefault {
+		err = defaults.Set(structPointer)
+		if err != nil {
+			return
+		}
+	}
+	if key == "" {
+		err = viper.Unmarshal(structPointer, defaultDecoderConfig)
+	} else {
+		err = viper.UnmarshalKey(key, structPointer, defaultDecoderConfig)
+	}
+	if err != nil {
+		return
+	}
+	if _config.ValidAfterParse {
+		validate := validator.New()
+		err = validate.Struct(structPointer)
+		if err != nil {
+			return
+		}
+	}
+	return
 }
 
 func defaultDecoderConfig(config *mapstructure.DecoderConfig) {
